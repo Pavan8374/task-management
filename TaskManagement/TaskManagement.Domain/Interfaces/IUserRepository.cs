@@ -1,6 +1,8 @@
-﻿namespace TaskManagement.Domain.Interfaces
+﻿using TaskManagement.Domain.Entities;
+
+namespace TaskManagement.Domain.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
     }
 }

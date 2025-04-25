@@ -19,7 +19,7 @@ namespace TaskManagement.Application.Interfaces
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>TEntity</returns>
-        public Task<TEntity> GetByIdAsync(Guid id);
+        public Task<TEntity> GetByIdAsync(int id);
 
         /// <summary>
         /// Add TEntity

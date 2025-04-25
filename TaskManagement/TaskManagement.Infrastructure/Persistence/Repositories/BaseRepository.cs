@@ -27,7 +27,6 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         /// <returns>TEntity</returns>
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            entity.Id = Guid.NewGuid();
             entity.IsActive = true;
             entity.CreatedAt = DateTime.UtcNow;
             //entity.ModifiedAt = DateTime.UtcNow;
@@ -41,7 +40,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>TEntity</returns>
-        public virtual async Task<TEntity> GetByIdAsync(Guid id)
+        public virtual async Task<TEntity> GetByIdAsync(int id)
         {
             return await GetQuery().Where(x => x.Id == id).FirstOrDefaultAsync();
         }

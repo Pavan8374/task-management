@@ -26,7 +26,7 @@ namespace TaskManagement.Application.Services
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>TEntity</returns>
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
             return await _baseRepository.GetByIdAsync(id);
         }

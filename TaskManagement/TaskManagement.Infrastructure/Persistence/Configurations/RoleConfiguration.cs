@@ -9,6 +9,9 @@ namespace TaskManagement.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.ToTable("Roles");
+
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.RoleName).IsRequired().HasColumnName("RoleName").HasColumnType("nvarchar(10)");
         }
     }
 }
