@@ -15,7 +15,7 @@ namespace TaskManagement.API.Middleware
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="next">Requets delegate</param>
+        /// <param name="next">Request delegate</param>
         /// <param name="logger">logger</param>
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {

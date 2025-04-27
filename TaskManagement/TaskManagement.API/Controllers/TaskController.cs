@@ -34,7 +34,7 @@ namespace TaskManagement.API.Controllers
         [ProducesResponseType(typeof(TaskDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SignUpAsync([FromBody] CreateTaskRequest createTaskRequest)
+        public async Task<IActionResult> AddTask([FromBody] CreateTaskRequest createTaskRequest)
         {
             var response = await _taskService.AddTask(createTaskRequest);
             return Ok(ApiResponse<TaskDto>.SuccessResponse(response));

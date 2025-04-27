@@ -11,6 +11,10 @@ using User = TaskManagement.Domain.Entities.User;
 
 namespace TaskManagement.Tests.Application.Services
 {
+    /// <summary>
+    /// Task service tests
+    /// </summary>
+    
     [TestFixture]
     public class TaskServiceTests
     {
@@ -19,6 +23,9 @@ namespace TaskManagement.Tests.Application.Services
         private Mock<IUserService> _mockUserService;
         private TaskService _taskService;
 
+        /// <summary>
+        /// Setup mocking services and repositories
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -38,6 +45,10 @@ namespace TaskManagement.Tests.Application.Services
 
         #region AddTask Tests
 
+        /// <summary>
+        /// Add task with valid request body returns task dto.
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task AddTask_ValidRequest_ReturnsTaskDto()
         {
@@ -107,6 +118,10 @@ namespace TaskManagement.Tests.Application.Services
             _mockTaskRepository.Verify(x => x.GetTask(It.IsAny<int>()), Times.Once);
         }
 
+
+        /// <summary>
+        /// Add task  with empty request body should return business exception 
+        /// </summary>
         [Test]
         public void AddTask_NullRequest_ThrowsBusinessException()
         {
@@ -121,6 +136,9 @@ namespace TaskManagement.Tests.Application.Services
             _mockTaskRepository.Verify(x => x.AddAsync(It.IsAny<DomainTask>()), Times.Never);
         }
 
+        /// <summary>
+        /// Add task with invalid user throws business exception
+        /// </summary>
         [Test]
         public void AddTask_InvalidAssignedUser_ThrowsBusinessException()
         {
@@ -147,6 +165,10 @@ namespace TaskManagement.Tests.Application.Services
 
         #region GetAllTasks Tests
 
+        /// <summary>
+        /// Get all tasks returns taskdto list
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetAllTasks_TasksExist_ReturnsTaskDtoList()
         {
@@ -206,6 +228,11 @@ namespace TaskManagement.Tests.Application.Services
             _mockTaskRepository.Verify(x => x.GetAllTasks(), Times.Once);
         }
 
+
+        /// <summary>
+        /// Get all tasks with notasks returns empty list.
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetAllTasks_NoTasks_ReturnsEmptyList()
         {
@@ -229,6 +256,10 @@ namespace TaskManagement.Tests.Application.Services
 
         #region GetTask Tests
 
+        /// <summary>
+        /// Get task returns exiested task dto
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetTask_TaskExists_ReturnsTaskDto()
         {
@@ -268,6 +299,9 @@ namespace TaskManagement.Tests.Application.Services
             _mockTaskRepository.Verify(x => x.GetTask(taskId), Times.Once);
         }
 
+        /// <summary>
+        /// Get task where task doesnot exist throws exception
+        /// </summary>
         [Test]
         public void GetTask_TaskDoesNotExist_ThrowsException()
         {
@@ -287,6 +321,10 @@ namespace TaskManagement.Tests.Application.Services
 
         #region GetAllTasksAssignedToUser Tests
 
+        /// <summary>
+        /// Get all tasks assigned to user and should return taskdto list when tasks exists
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetAllTasksAssignedToUser_TasksExist_ReturnsTaskDtoList()
         {
@@ -351,6 +389,10 @@ namespace TaskManagement.Tests.Application.Services
             _mockTaskRepository.Verify(x => x.GetAllTasksAssignedToUser(userId), Times.Once);
         }
 
+        /// <summary>
+        /// Get all tasks assigned to useer Return empty list when no tasks
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetAllTasksAssignedToUser_NoTasks_ReturnsEmptyList()
         {
