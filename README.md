@@ -2,6 +2,8 @@
 
 ## Overview
 
+![Video](assets/Project_Code_Architecture_explanation.mp4)
+
 This project is a **Task Management API** built using **.NET 9**, **ASP.NET Core Web API**, **SQL Server**, **Entity Framework Core (EF Core)**, and hosted on **Azure App Service**. The project follows **Clean Architecture** principles to ensure maintainability and scalability.
 
 **API Hosted URL:**  
