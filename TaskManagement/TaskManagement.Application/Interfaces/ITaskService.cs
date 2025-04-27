@@ -2,6 +2,9 @@
 
 namespace TaskManagement.Application.Interfaces
 {
+    /// <summary>
+    /// Task service interface
+    /// </summary>
     public interface ITaskService : IBaseService<Domain.Entities.Task>
     {
         /// <summary>

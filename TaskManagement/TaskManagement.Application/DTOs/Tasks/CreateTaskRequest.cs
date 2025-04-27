@@ -2,6 +2,9 @@
 
 namespace TaskManagement.Application.DTOs.Tasks
 {
+    /// <summary>
+    /// Create task request model
+    /// </summary>
     public class CreateTaskRequest
     {
         /// <summary>

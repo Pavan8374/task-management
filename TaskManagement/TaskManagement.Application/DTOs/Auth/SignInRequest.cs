@@ -17,7 +17,6 @@ namespace TaskManagement.Application.DTOs.Auth
         /// <summary>
         /// Password
         /// </summary>
-
         [Required(ErrorMessage = "Password is required!")]
         public string Password { get; set; }
     }

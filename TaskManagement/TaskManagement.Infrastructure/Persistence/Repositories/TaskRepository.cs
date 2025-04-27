@@ -4,9 +4,17 @@ using Task = TaskManagement.Domain.Entities.Task;
 
 namespace TaskManagement.Infrastructure.Persistence.Repositories
 {
+    /// <summary>
+    /// Task repository
+    /// </summary>
     public class TaskRepository : BaseRepository<Task, AppDbContext>, ITaskRepository
     {
         private readonly AppDbContext _context;
+
+        /// <summary>
+        /// Task repository
+        /// </summary>
+        /// <param name="context">ApplicationDb context</param>
         public TaskRepository(AppDbContext context) : base(context)
         {
             _context = context;

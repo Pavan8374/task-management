@@ -13,9 +13,6 @@ This project is a **Task Management API** built using **.NET 9**, **ASP.NET Core
 
 The folder structure is organized to follow **Clean Architecture** principles, ensuring separation of concerns and scalability. Here's the structure:
 
-├── TaskManagement.API # API project (Controllers, Models, and API logic) ├── TaskManagement.Infrastructure # Data access layer (EF Core, SQL scripts, migrations) ├── TaskManagement.Tests # Unit tests for the application ├── TaskManagement.Core # Core business logic (Interfaces, Services) ├── TaskManagement.Domain # Entities, Enums, Interfaces, etc.
-
-
 ### Explanation:
 
 - **TaskManagement.API**: Contains the ASP.NET Core Web API controllers, models, and routes to handle HTTP requests.

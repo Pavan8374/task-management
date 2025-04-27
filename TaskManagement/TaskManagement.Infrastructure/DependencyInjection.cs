@@ -14,11 +14,20 @@ using TaskManagement.Infrastructure.Persistence.Repositories;
 
 namespace TaskManagement.Infrastructure
 {
+    /// <summary>
+    /// Dependency injection
+    /// </summary>
     public static class DependencyInjection
     {
+        /// <summary>
+        /// Add infrastructure
+        /// </summary>
+        /// <param name="services">Services</param>
+        /// <param name="config">Configuration</param>
+        /// <returns>Services</returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
         {
-            // Register all infrastructure-level services here
+            // Register all infrastructure-level services 
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
 

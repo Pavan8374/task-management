@@ -4,17 +4,30 @@ using TaskManagement.Application.Exceptions;
 
 namespace TaskManagement.API.Middleware
 {
+    /// <summary>
+    /// Exception handling middleware
+    /// </summary>
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="next">Requets delegate</param>
+        /// <param name="logger">logger</param>
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Invokde async
+        /// </summary>
+        /// <param name="context">Context</param>
+        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             try

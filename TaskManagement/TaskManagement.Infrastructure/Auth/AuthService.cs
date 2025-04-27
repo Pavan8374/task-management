@@ -9,16 +9,31 @@ using TaskManagement.Domain.Enums;
 
 namespace TaskManagement.Infrastructure.Auth
 {
+    /// <summary>
+    /// Auth service
+    /// </summary>
     public class AuthService : IAuthService
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Auth service constructor
+        /// </summary>
+        /// <param name="userService">User service</param>
+        /// <param name="configuration">Configuration</param>
         public AuthService(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Sign up account
+        /// </summary>
+        /// <param name="signupRequest">Signup request</param>
+        /// <returns></returns>
+        /// <exception cref="BusinessException">Business exception</exception>
         public async Task<SignInResponseModel> SignUpAsync(SignUpRequest signupRequest)
         {
             if (signupRequest is null)
@@ -41,6 +56,14 @@ namespace TaskManagement.Infrastructure.Auth
             await _userService.AddAsync(user);
             return LoginResponse(user);
         }
+
+        /// <summary>
+        /// Sign in account
+        /// </summary>
+        /// <param name="request">Request</param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException">Not found exception</exception>
+        /// <exception cref="ValidationException">Validation exception</exception>
         public async Task<SignInResponseModel> SignInAsync(SignInRequest request)
         {
             var user = await _userService.GetUserByEmailAsync(request.Email);

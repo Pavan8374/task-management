@@ -27,6 +27,10 @@ namespace TaskManagement.Application.DTOs.Auth
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
         public string Password { get; set; }
 
+        /// <summary>
+        /// Is admin flag to create admin account.
+        /// </summary>
+
         [DefaultValue(false)]
         public bool IsAdmin { get; set; } = false;
     }

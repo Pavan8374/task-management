@@ -4,9 +4,17 @@ using TaskManagement.Domain.Interfaces;
 
 namespace TaskManagement.Infrastructure.Persistence.Repositories
 {
+    /// <summary>
+    /// User repository
+    /// </summary>
     public class UserRepository : BaseRepository<User, AppDbContext>, IUserRepository
     {
         private readonly AppDbContext _context;
+
+        /// <summary>
+        /// User repository constructor
+        /// </summary>
+        /// <param name="context">ApplicationDb context</param>
         public UserRepository(AppDbContext context) : base(context)
         {
             _context = context;
