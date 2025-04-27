@@ -16,7 +16,7 @@ namespace TaskManagement.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(
-                Assembly.GetAssembly(typeof(AppContext)));
+                Assembly.GetAssembly(typeof(AppDbContext)));
             base.OnModelCreating(modelBuilder);
         }
     }

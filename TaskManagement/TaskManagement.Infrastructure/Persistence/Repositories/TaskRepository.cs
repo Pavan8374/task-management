@@ -12,8 +12,6 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-
-
         /// <summary>
         /// Get task by id
         /// </summary>
@@ -26,7 +24,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         {
             try
             {
-                return await _context.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
+                return await GetQuery().FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
@@ -47,7 +45,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         {
             try
             {
-                return await _context.Tasks.AsNoTracking().Where(x => x.IsActive).ToListAsync();
+                return await GetQuery().ToListAsync();
             }
             catch (Exception)
             {
@@ -55,5 +53,20 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
             }
         }
 
+        /// <summary>
+        /// Get all tasks assigned to user
+        /// </summary>
+        /// <param name="userId">Assigned user identity</param>
+        /// <returns>Task list</returns>
+        public async Task<List<Task>> GetAllTasksAssignedToUser(int userId)
+        {
+            return await GetQuery().Where(x => x.AssignedToUserId == userId).ToListAsync();
+        }
+
+        protected override IQueryable<Task> GetQuery()
+        {
+            return _context.Tasks.AsNoTracking()
+                .Include(x => x.AssignedToUser).Include(x => x.AssignedByUser).Where(x => x.IsActive);
+        } 
     }
 }

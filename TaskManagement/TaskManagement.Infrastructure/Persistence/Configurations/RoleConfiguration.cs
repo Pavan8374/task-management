@@ -12,6 +12,10 @@ namespace TaskManagement.Infrastructure.Persistence.Configurations
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.RoleName).IsRequired().HasColumnName("RoleName").HasColumnType("nvarchar(10)");
+            builder.HasData(
+                 new Role() { Id = 1, RoleName = "Admin" },
+                 new Role() { Id = 2, RoleName = "User" }
+             );
         }
     }
 }

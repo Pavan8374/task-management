@@ -1,8 +1,9 @@
-﻿namespace TaskManagement.Application.Interfaces;
+﻿using TaskManagement.Application.DTOs.Auth;
 
-public interface IAuthService
+namespace TaskManagement.Application.Interfaces;
+
+public interface IAuthService   
 {
-    string GenerateSalt();
-    string HashPassword(string password, string salt);
-    bool VerifyPassword(string enteredPassword, string storedHash, string salt);
+    public Task<SignInResponseModel> SignUpAsync(SignUpRequest signupRequest);
+    public Task<SignInResponseModel> SignInAsync(SignInRequest request);
 }

@@ -1,31 +1,93 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using TaskManagement.Application.Common;
+using TaskManagement.Application.DTOs.Auth;
+using TaskManagement.Application.Exceptions;
 using TaskManagement.Application.Interfaces;
+using TaskManagement.Domain.Entities;
+using TaskManagement.Domain.Enums;
 
 namespace TaskManagement.Infrastructure.Auth
 {
     public class AuthService : IAuthService
     {
-        public string GenerateSalt()
+        private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
+        public AuthService(IUserService userService, IConfiguration configuration)
         {
-            byte[] saltBytes = new byte[16];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(saltBytes);
-            return Convert.ToBase64String(saltBytes);
+            _userService = userService;
+            _configuration = configuration;
         }
 
-        public string HashPassword(string password, string salt)
+        public async Task<SignInResponseModel> SignUpAsync(SignUpRequest signupRequest)
         {
-            var combined = Encoding.UTF8.GetBytes(password + salt);
-            using var sha256 = SHA256.Create();
-            byte[] hashBytes = sha256.ComputeHash(combined);
-            return Convert.ToBase64String(hashBytes);
+            if (signupRequest is null)
+                throw new BusinessException("Request body empty");
+
+            var existingUser = await _userService.GetUserByEmailAsync(signupRequest.Email);
+            if (existingUser is not null)
+                throw new BusinessException("Already an existing account with this email");
+
+            string salt = SharedUtils.GenerateSalt();
+            string passwordHash = SharedUtils.HashPassword(signupRequest.Password, salt);
+            var user = new User()
+            {
+                Email = signupRequest.Email,
+                FullName = signupRequest.FullName,
+                RoleId = signupRequest.IsAdmin ? (int)RoleEnum.Admin : (int)RoleEnum.User,
+                Salt = salt,
+                PasswordHash = passwordHash,
+            };
+            await _userService.AddAsync(user);
+            return LoginResponse(user);
+        }
+        public async Task<SignInResponseModel> SignInAsync(SignInRequest request)
+        {
+            var user = await _userService.GetUserByEmailAsync(request.Email);
+
+            if (user is null)
+                throw new NotFoundException("User not found with this email.");
+
+            var isPasswordValid = SharedUtils.VerifyPassword(request.Password, user.PasswordHash, user.Salt);
+
+            if (!isPasswordValid)
+                throw new ValidationException("Invalid email or password.");
+
+            return LoginResponse(user);
         }
 
-        public bool VerifyPassword(string enteredPassword, string storedHash, string salt)
+        private SignInResponseModel LoginResponse(User user)
         {
-            var hashOfEntered = HashPassword(enteredPassword, salt);
-            return hashOfEntered == storedHash;
+            var claims = SharedUtils.GetTokenClaims(user.Email, user.Id.ToString(), user.FullName, GetRoleNameFromId(user.RoleId));
+
+            var token = SharedUtils.GetJWTToken(
+                    claims,
+                    _configuration["JWT:Secret"],
+                    _configuration["JWT:ValidIssuer"],
+                    _configuration["JWT:ValidAudience"],
+                    _configuration["JWT:JWTExpiryDays"]
+                );
+
+            return new SignInResponseModel
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                FullName = user.FullName,
+                RoleName = GetRoleNameFromId(user.RoleId),
+                Expiration = token.ValidTo,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+            };
         }
+
+        private string GetRoleNameFromId(int roleId)
+        {
+            if (Enum.IsDefined(typeof(RoleEnum), roleId))
+            {
+                return ((RoleEnum)roleId).ToString();
+            }
+
+            return "Unknown";
+        }
+
     }
 }

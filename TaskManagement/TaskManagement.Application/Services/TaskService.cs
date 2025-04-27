@@ -1,55 +1,79 @@
 ﻿using System.Data;
+using TaskManagement.Application.Common;
 using TaskManagement.Application.DTOs.Tasks;
+using TaskManagement.Application.Exceptions;
 using TaskManagement.Application.Interfaces;
-using TaskManagement.Domain.Entities;
 using TaskManagement.Domain.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Task = TaskManagement.Domain.Entities.Task;
 
 namespace TaskManagement.Application.Services
 {
-    public class TaskService : BaseService<Domain.Entities.Task>, ITaskService
+    public class TaskService : BaseService<Task>, ITaskService
     {
         private readonly ITaskRepository _taskRepository;
-        public TaskService(ITaskRepository taskRepository) : base(taskRepository)
+        private readonly IUserContext _userContext;
+        private readonly IUserService _userService;
+        public TaskService(ITaskRepository taskRepository, IUserContext userContext, IUserService userService) : base(taskRepository)
         {
             _taskRepository = taskRepository;
+            _userContext = userContext;
+            _userService = userService;
         }
 
-
+        /// <summary>
+        /// Add new task
+        /// </summary>
+        /// <param name="createTaskRequest">Create a new task</param>
+        /// <returns></returns>
+        /// <exception cref="BusinessException"></exception>
         public async Task<TaskDto> AddTask (CreateTaskRequest createTaskRequest)
         {
+            if(createTaskRequest == null)
+                throw new BusinessException("Request body is empty.");
+
+            bool isUserExist = await _userService.IsUserExist(createTaskRequest.AssignedToUserId);
+            if (!isUserExist)
+                throw new BusinessException("The assigned user not found!");
+
             var task = new Task
             {
                 Title = createTaskRequest.Title,
                 Description = createTaskRequest.Description,
                 AssignedToUserId = createTaskRequest.AssignedToUserId,
+                AssignedByUserId = _userContext.UserId
             };
+
             await _taskRepository.AddAsync(task);
+            var newTask = await _taskRepository.GetTask(task.Id);
             return new TaskDto
             {
-                Id = task.Id,
-                Title = task.Title,
-                Description = task.Description,
+                Id = newTask.Id,
+                Title = newTask.Title,
+                Description = newTask.Description,
                 TaskStatus = new TaskStatusDTO
                 {
-                    Id = (int)task.TaskStatus,
-                    Status = task.TaskStatus.ToString()
+                    Id = (int)newTask.TaskStatus,
+                    Status = newTask.TaskStatus.ToString()
                 },
                 AssignedByUser = new AssignedByUserDto
                 {
-                    UserId = task.AssignedByUserId,
-                    FullName = task.AssignedByUser.FullName,
-                    Email = task.AssignedByUser.Email
+                    UserId = newTask.AssignedByUserId,
+                    FullName = newTask.AssignedByUser.FullName,
+                    Email = newTask.AssignedByUser.Email
                 },
                 AssignedToUser = new AssignedToUserDto
                 {
-                    UserId = task.AssignedToUserId,
-                    FullName = task.AssignedToUser.FullName,
-                    Email = task.AssignedToUser.Email
+                    UserId = newTask.AssignedToUserId,
+                    FullName = newTask.AssignedToUser.FullName,
+                    Email = newTask.AssignedToUser.Email
                 }
             };
         }
+
+        /// <summary>
+        /// Get all tasks 
+        /// </summary>
+        /// <returns>TaskDto list</returns>
         public async Task<List<TaskDto>> GetAllTasks()
         {
             var data = await _taskRepository.GetAllTasks();
@@ -79,6 +103,11 @@ namespace TaskManagement.Application.Services
             }).ToList();
         }
 
+        /// <summary>
+        /// Get task by task identity
+        /// </summary>
+        /// <param name="id">Task identity</param>
+        /// <returns>Task dto</returns>
         public async Task<TaskDto> GetTask(int id)
         {
             var data = await _taskRepository.GetTask(id);
@@ -106,5 +135,39 @@ namespace TaskManagement.Application.Services
                 }
             };
         }
-    }
+
+        /// <summary>
+        /// Get all tasks assigned to user
+        /// </summary>
+        /// <param name="userId">Assigned user identity</param>
+        /// <returns>TaskDto list</returns>
+        public async Task<List<TaskDto>> GetAllTasksAssignedToUser(int userId)
+        {
+            var data = await _taskRepository.GetAllTasksAssignedToUser(userId);
+            return data.Select(x =>
+                new TaskDto
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    TaskStatus = new TaskStatusDTO
+                    {
+                        Id = (int)x.TaskStatus,
+                        Status = x.TaskStatus.ToString()
+                    },
+                    AssignedByUser = new AssignedByUserDto
+                    {
+                        UserId = x.AssignedByUserId,
+                        FullName = x.AssignedByUser.FullName,
+                        Email = x.AssignedByUser.Email
+                    },
+                    AssignedToUser = new AssignedToUserDto
+                    {
+                        UserId = x.AssignedToUserId,
+                        FullName = x.AssignedToUser.FullName,
+                        Email = x.AssignedToUser.Email
+                    }
+                }).ToList();
+        }
+     }
 }

@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using TaskManagement.Application.Interfaces;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Domain.Interfaces;
 
-namespace TaskManagement.Infrastructure.Persistence.Repositories
+namespace TaskManagement.Application.Services
 {
-    public class UserRepository : BaseRepository<User, AppDbContext>, IUserRepository
+    public class UserService : BaseService<User>, IUserService
     {
-        private readonly AppDbContext _context;
-        public UserRepository(AppDbContext context) : base(context)
+        private readonly IUserRepository _userRepository;
+        public UserService(IUserRepository userRepository) : base(userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;   
         }
 
         /// <summary>
@@ -19,8 +19,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         /// <returns>User</returns>
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            var emailLower = email.ToLower();
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.IsActive && x.Email.ToLower() == emailLower);
+            return await _userRepository.GetUserByEmailAsync(email);    
         }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace TaskManagement.Infrastructure.Persistence.Repositories
         /// <returns>Boolean: true/false</returns>
         public async Task<bool> IsUserExist(int userId)
         {
-            return await _context.Users.AsNoTracking().AnyAsync(x => x.Id == userId);
+            return await _userRepository.IsUserExist(userId);
         }
     }
 }
