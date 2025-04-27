@@ -13,11 +13,7 @@ This project is a **Task Management API** built using **.NET 9**, **ASP.NET Core
 
 The folder structure is organized to follow **Clean Architecture** principles, ensuring separation of concerns and scalability. Here's the structure:
 
-├── TaskManagement.API # API project (Controllers, Models, and API logic) 
-├── TaskManagement.Infrastructure # Data access layer (EF Core, SQL scripts, migrations) 
-├── TaskManagement.Tests # Unit tests for the application 
-├── TaskManagement.Core # Core business logic (Interfaces, Services) 
-├── TaskManagement.Domain # Entities, Enums, Interfaces, etc.
+├── TaskManagement.API # API project (Controllers, Models, and API logic) ├── TaskManagement.Infrastructure # Data access layer (EF Core, SQL scripts, migrations) ├── TaskManagement.Tests # Unit tests for the application ├── TaskManagement.Core # Core business logic (Interfaces, Services) ├── TaskManagement.Domain # Entities, Enums, Interfaces, etc.
 
 
 ### Explanation:
@@ -35,7 +31,7 @@ The folder structure is organized to follow **Clean Architecture** principles, e
 
 1. **Clone the Repository**: Clone the repository to your local machine using Git.
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/Pavan8374/task-management.git
     ```
 
 2. **Setup the Database**:
@@ -141,7 +137,7 @@ I deployed the API to **Azure App Services** and created an **Azure SQL Database
 
 A unit testing project called **TaskManagement.Tests** has been created to test the application.
 
-- **Testing Framework**: **NLog** is used for logging.
+- **Testing Framework**: **NUnit** is used for Unit testing.
 - **Mocking**: **Moq** is used to mock services and repositories.
 - **Tested Service**: The `TaskService` and its methods have been tested.
 - **Reusable Code**: Common functionality has been made reusable in the service methods.
