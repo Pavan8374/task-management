@@ -122,7 +122,7 @@ As part of the task, I made the following improvements:
 
 ## Azure Deployment (Optional Task)
 
-I deployed the API to **Azure App Services** and created an **Azure SQL Database** to host the application and data. The deployment was done using **GitHub Actions**.
+I deployed the API to **Azure App Services** and created an **Azure SQL Database** to host the application and data. The deployment was done using **Azure App service**.
 
 **API Hosted URL:**  
 [Task Management API Azure](https://taskmanagementapi-gpc2bbb9dffharch.indonesiacentral-01.azurewebsites.net/index.html)
