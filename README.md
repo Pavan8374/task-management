@@ -147,7 +147,9 @@ This project demonstrates the integration of **.NET 9**, **Entity Framework Core
 
 ---
 
-## You can check out the video recording in the assets folder.
+## You can either download the video recording in the assets folder or veiw down below.
+
+https://github.com/user-attachments/assets/63bfa2dd-4078-4fea-b14e-2c5022de123b
 
 **For any questions or further clarification, feel free to reach out!**
 
